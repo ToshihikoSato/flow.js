@@ -20,21 +20,24 @@ Samples and examples are available in the `samples/` folder. Please push your ow
 JQueryとnode.jsバックエンドデモは、https://github.com/flowjs/flow.js/tree/master/samples/Node.js にあります。
 JQuery and node.js backend demo https://github.com/flowjs/flow.js/tree/master/samples/Node.js
 
-## How can I install it?
+## インストールはどうしたら良いですか？
 
+https://github.com/flowjs/flow.js/releases より最新ビルドをダウンロードしてください。
+`dist/`フォルダに開発版と圧縮された製品版があります。
 Download a latest build from https://github.com/flowjs/flow.js/releases
 it contains development and minified production files in `dist/` folder.
 
-or use bower:
+または、bowerを使ってインストール：
 ```console
 bower install flow.js#~2
 ```                
-or use git clone
+または、git cloneを使ってインストール：
 ```console
 git clone https://github.com/flowjs/flow.js
 ```
-## How can I use it?
+## どうやって使えば良いですか？
 
+何をどこへpostするかの情報を与えて新規に`Flow`オブジェクトを作成します：
 A new `Flow` object is created with information of what and where to post:
 ```javascript
 var flow = new Flow({
@@ -44,11 +47,13 @@ var flow = new Flow({
 // Flow.js isn't supported, fall back on a different method
 if(!flow.support) location.href = '/some-old-crappy-uploader';
 ```
+ファイルを選択させるかドラッグ&ドロップさせるために、ドロップのターゲットとブラウズするためにクリックされるDOMアイテムを割りあててください。
 To allow files to be either selected and drag-dropped, you'll assign drop target and a DOM item to be clicked for browsing:
 ```javascript
 flow.assignBrowse(document.getElementById('browseButton'));
 flow.assignDrop(document.getElementById('dropTarget'));
 ```
+その後、イベントを受け取ることでflow.jsとの対話を行います：
 After this, interaction with Flow.js is done by listening to events:
 ```javascript
 flow.on('fileAdded', function(file, event){
@@ -61,7 +66,7 @@ flow.on('fileError', function(file, message){
     console.log(file, message);
 });
 ```
-## How do I set it up with my server?
+## サーバーはどのように設定すれば良いのでしょうか？
 
 Most of the magic for Flow.js happens in the user's browser, but files still need to be reassembled from chunks on the server side. This should be a fairly simple task and can be achieved in any web framework or language, which is able to receive file uploads.
 
