@@ -68,45 +68,53 @@ flow.on('fileError', function(file, message){
 ```
 ## サーバーはどのように設定すれば良いのでしょうか？
 
+flow.jsに関する魔法のほとんどはうユーザーのブラウザの中で起こりますが、サーバーサイドでは断片を再編成する必要があります。これは全く単純なタスク可能です。ですので、ファイルアップロードを受け取ることが可能ないかなるwebフレームワークや言語でも実装することが可能です
 Most of the magic for Flow.js happens in the user's browser, but files still need to be reassembled from chunks on the server side. This should be a fairly simple task and can be achieved in any web framework or language, which is able to receive file uploads.
 
+アップロード断片の状態を取り扱うため、すべてのリクエストには追加パラメタが一緒に送られます：
 To handle the state of upload chunks, a number of extra parameters are sent along with all requests:
 
-* `flowChunkNumber`: The index of the chunk in the current upload. First chunk is `1` (no base-0 counting here).
-* `flowTotalChunks`: The total number of chunks.  
-* `flowChunkSize`: The general chunk size. Using this value and `flowTotalSize` you can calculate the total number of chunks. Please note that the size of the data received in the HTTP might be lower than `flowChunkSize` of this for the last chunk for a file.
-* `flowTotalSize`: The total file size.
-* `flowIdentifier`: A unique identifier for the file contained in the request.
-* `flowFilename`: The original file name (since a bug in Firefox results in the file name not being transmitted in chunk multipart posts).
-* `flowRelativePath`: The file's relative path when selecting a directory (defaults to file name in all browsers except Chrome).
+* `flowChunkNumber`: 現在のアップロードにおける断片のインデックス。最初n最初の断片は`1`となる (ここでは0始まりではない)。The index of the chunk in the current upload. First chunk is `1` (no base-0 counting here).
+* `flowTotalChunks`: 断片の全体数。The total number of chunks.  
+* `flowChunkSize`: 一般的な断片サイズ。この値と`flowTotalSize`を使って、断片の全体数を計算することができる。ただし、1ファイルにおける最後の断片では`flowChunkSize`より実際にHTTPで受診したデータは小さいかもしれない。The general chunk size. Using this value and `flowTotalSize` you can calculate the total number of chunks. Please note that the size of the data received in the HTTP might be lower than `flowChunkSize` of this for the last chunk for a file.
+* `flowTotalSize`: 全体のファイルサイズ。The total file size.
+* `flowIdentifier`: リクエストに含まれるそのファイルにユニークなID。A unique identifier for the file contained in the request.
+* `flowFilename`: オリジナルファイル名（Firefoxのバグにより、マルチパートpostの断片ではファイル名が渡ってこない）。The original file name (since a bug in Firefox results in the file name not being transmitted in chunk multipart posts).
+* `flowRelativePath`: ディレクトリを選択した場合にファイルの相対パス（Chromeを除くすべてのブラウザではディフォルトはファイル名）。The file's relative path when selecting a directory (defaults to file name in all browsers except Chrome).
 
+同じ断片が２回以上アップロードされることを許してください。これは標準的な動きではないが、不安定なネットワークでは起こりえます。これはまさにFLow.jsが目指して設計されたケースです。
 You should allow for the same chunk to be uploaded more than once; this isn't standard behaviour, but on an unstable network environment it could happen, and this case is exactly what Flow.js is designed for.
 
+各リクエストでは、HTTPステータスコードを確認してください（`permanentErrors`オプションdオプションで変更可能）。
 For every request, you can confirm reception in HTTP status codes (can be change through the `permanentErrors` option):
 
-* `200`, `201`, `202`: The chunk was accepted and correct. No need to re-upload.
-* `404`, `415`. `500`, `501`: The file for which the chunk was uploaded is not supported, cancel the entire upload.
-* _Anything else_: Something went wrong, but try reuploading the file.
+* `200`, `201`, `202`: 断片が受信できかつ正しい。再送不要。The chunk was accepted and correct. No need to re-upload.
+* `404`, `415`. `500`, `501`: 断片がアップロードされたファイルはサポートされない。全体のアップロードをキャンセルする。The file for which the chunk was uploaded is not supported, cancel the entire upload.
+* _Anything else_: 何らかの問題が発生。アップロードを再実行せよ。Something went wrong, but try reuploading the file.
 
-## Handling GET (or `test()` requests)
+## GET（または`test()`リクエスト）の処理
 
+`testChunks`オプションを有効にすると、ブラウザを再起動したり別のブラウザに切り替えてアップロードを再開できます（理論的には、同じファイルのアップロードを複数のタブや異なるブラウザにまたがった状態でさせも行うことが可能）。`POST`データリクエストはFlow.jsにデータを受信させるために必要とされる。しかし、同じパラメタを持った対応するGETリクエストを実装するよう拡張することも可能：
 Enabling the `testChunks` option will allow uploads to be resumed after browser restarts and even across browsers (in theory you could even run the same file upload across multiple tabs or different browsers).  The `POST` data requests listed are required to use Flow.js to receive data, but you can extend support by implementing a corresponding `GET` request with the same parameters:
 
-* If this request returns a `200`, `201` or `202` HTTP code, the chunks is assumed to have been completed.
-* If request returns a permanent error status, upload is stopped.
-* If request returns anything else, the chunk will be uploaded in the standard fashion.
+* もしリクエストが`200`, `201` 及び `202` HTTPコードを返した場合は、断片は完了したものとみなされる。If this request returns a `200`, `201` or `202` HTTP code, the chunks is assumed to have been completed.
+* もしリクエストが永久エラー状態を返したら、アップロードは停止される。If request returns a permanent error status, upload is stopped.
+* もしリクエストがその他のコードを返したら、断片は通常通りアップロードされたものとする。If request returns anything else, the chunk will be uploaded in the standard fashion.
 
+これが行われて`testChunks`が有効なら、ブラウザが再起動した後であっても、再アップロードの必要がないすでにアップロード済みの断片のチェックを行ってアップロードは直ちに追いつきます。
 After this is done and `testChunks` enabled, an upload can quickly catch up even after a browser restart by simply verifying already uploaded chunks that do not need to be uploaded again.
 
-## Full documentation
+## 全体のドキュメント　Full documentation
 
 ### Flow
 #### Configuration
 
+オブジェクトはコンフィグレーションオプションをつけてロードされる：
 The object is loaded with a configuration options:
 ```javascript
 var r = new Flow({opt1:'val', ...});
 ```
+利用可能なコンフィグレーションオプションは：
 Available configuration options are:
 
 * `target` The target URL for the multipart POST request. This can be a string or a function. If a
