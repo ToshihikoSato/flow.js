@@ -2,17 +2,22 @@
 
 [![Saucelabs Test Status](https://saucelabs.com/browser-matrix/flowjs.svg)](https://saucelabs.com/u/flowjs)
 
-Flow.js は、HTML5 File APIを使って同時に複数のファイルのアップロードを安定かつレジューム可能に実現したJavaScriptライブラリです。
+Flow.jsは、HTML5 File APIを使って同時に複数のファイルのアップロードを安定かつレジューム可能に実現したJavaScriptライブラリです。
+Flow.js is a JavaScript library providing multiple simultaneous, stable and resumable uploads via the HTML5 File API. 
 
+このライブラリは、HTTPで大きなファイルをアップロードする際に耐障害性を持つことを目的として設計されました。これはファイルを小さな断片に分割することにより実現しています。つまり、断片のアップロードが失敗した場合にはいつも成功するまでアップロードがリトライされます。これによってローカルやサーバーへのネットワークのいずれかのネットワークが不調でもアップロードが自動的に再開されます。さらに、ユーザに一時停止、再開、さらに状態を損なわずにアップロードを回復することさえ可能です。これは、ファイル全体のアップロードが中止されるわけではなく、現在アップロード中の断片のみが中止されるためこのようなことが可能となっています。
 The library is designed to introduce fault-tolerance into the upload of large files through HTTP. This is done by splitting each file into small chunks. Then, whenever the upload of a chunk fails, uploading is retried until the procedure completes. This allows uploads to automatically resume uploading after a network connection is lost either locally or to the server. Additionally, it allows for users to pause, resume and even recover uploads without losing state because only the currently uploading chunks will be aborted, not the entire upload.
 
+FLow.jsは、`HTML5 File API`以外の外部依存がありません。これはファイルを小さな断片に分ける機能に基づいています。現在のところ、この方法がサポートされるのは、Firefox 4以上, Chrome 11以上, Safari 6以上 and Internet Explorer 10以上を限られています。
 Flow.js does not have any external dependencies other than the `HTML5 File API`. This is relied on for the ability to chunk files into smaller pieces. Currently, this means that support is limited to Firefox 4+, Chrome 11+, Safari 6+ and Internet Explorer 10+.
 
+サンプルは`samples/`フォルダにあります。このプロジェクトを助けるために、あなた自身のサンプルをMarkdownとして追加してください。
 Samples and examples are available in the `samples/` folder. Please push your own as Markdown to help document the project.
 
-## Can I see a demo?
-[Flow.js + angular.js file upload demo](http://flowjs.github.io/ng-flow/) - ng-flow extension page https://github.com/flowjs/ng-flow
+## デモは見られますか？
+[Flow.js + angular.js ファイルアップロードでデモ](http://flowjs.github.io/ng-flow/) - ng-flow 拡張ページ https://github.com/flowjs/ng-flow
 
+JQueryとnode.jsバックエンドデモは、https://github.com/flowjs/flow.js/tree/master/samples/Node.js にあります。
 JQuery and node.js backend demo https://github.com/flowjs/flow.js/tree/master/samples/Node.js
 
 ## How can I install it?
