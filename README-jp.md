@@ -117,11 +117,11 @@ var r = new Flow({opt1:'val', ...});
 利用可能なコンフィグレーションオプションは：
 Available configuration options are:
 
-* `target` The target URL for the multipart POST request. This can be a string or a function. If a
+* `target` マルチパートPOSTリクエストに対するターゲットURL。文字列または関数。関数の場合、引数としてFlowFile, FlowChunk, isTest(boolean)が渡される。（ディフォルト：`/`）The target URL for the multipart POST request. This can be a string or a function. If a
 function, it will be passed a FlowFile, a FlowChunk and isTest boolean (Default: `/`)
-* `singleFile` Enable single file upload. Once one file is uploaded, second file will overtake existing one, first one will be canceled. (Default: false)
-* `chunkSize` The size in bytes of each uploaded chunk of data. The last uploaded chunk will be at least this size and up to two the size, see [Issue #51](https://github.com/23/resumable.js/issues/51) for details and reasons. (Default: `1*1024*1024`)
-* `forceChunkSize` Force all chunks to be less or equal than chunkSize. Otherwise, the last chunk will be greater than or equal to `chunkSize`. (Default: `false`)
+* `singleFile` 単一ファイルのアップロードを有効にする。いったん一つのファイルがアップロードされると、２番目のファイルは既存のファイルを追い越して、最初のファイルはキャンセルされる。（ディフォルト： false）Enable single file upload. Once one file is uploaded, second file will overtake existing one, first one will be canceled. (Default: false)
+* `chunkSize` 各断片データのバイトサイズ。最後の断片は少なくてもこのサイズで２倍のサイズまでになりえます。その詳細と理由は、[Issue #51](https://github.com/23/resumable.js/issues/51)を参照してください。（ディフォルト：`1*1024*1024`）The size in bytes of each uploaded chunk of data. The last uploaded chunk will be at least this size and up to two the size, see [Issue #51](https://github.com/23/resumable.js/issues/51) for details and reasons. (Default: `1*1024*1024`)
+* `forceChunkSize` すべての断片をchunkSize以下にする。そうでなければ、最後の断片は `chunkSize`以上になる。（ディフォルト：`false`）Force all chunks to be less or equal than chunkSize. Otherwise, the last chunk will be greater than or equal to `chunkSize`. (Default: `false`)
 * `simultaneousUploads` Number of simultaneous uploads (Default: `3`)
 * `fileParameterName` The name of the multipart POST parameter to use for the file chunk  (Default: `file`)
 * `query` Extra parameters to include in the multipart POST with data. This can be an object or a
