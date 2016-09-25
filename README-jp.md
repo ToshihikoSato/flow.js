@@ -117,24 +117,24 @@ var r = new Flow({opt1:'val', ...});
 利用可能なコンフィグレーションオプションは：
 Available configuration options are:
 
-* `target` マルチパートPOSTリクエストに対するターゲットURL。文字列または関数。関数の場合、引数としてFlowFile, FlowChunk, isTest(boolean)が渡される。（ディフォルト：`/`）The target URL for the multipart POST request. This can be a string or a function. If a
+* `target` マルチパートPOSTリクエストに対するターゲットURL。これは文字列または関数です。関数の場合、引数としてFlowFile, FlowChunk, isTest(boolean)が渡されます。(ディフォルト: `/`)The target URL for the multipart POST request. This can be a string or a function. If a
 function, it will be passed a FlowFile, a FlowChunk and isTest boolean (Default: `/`)
-* `singleFile` 単一ファイルのアップロードを有効にする。いったん一つのファイルがアップロードされると、２番目のファイルは既存のファイルを追い越して、最初のファイルはキャンセルされる。（ディフォルト： false）Enable single file upload. Once one file is uploaded, second file will overtake existing one, first one will be canceled. (Default: false)
-* `chunkSize` 各断片データのバイトサイズ。最後の断片は少なくてもこのサイズで２倍のサイズまでになりえます。その詳細と理由は、[Issue #51](https://github.com/23/resumable.js/issues/51)を参照してください。（ディフォルト：`1*1024*1024`）The size in bytes of each uploaded chunk of data. The last uploaded chunk will be at least this size and up to two the size, see [Issue #51](https://github.com/23/resumable.js/issues/51) for details and reasons. (Default: `1*1024*1024`)
-* `forceChunkSize` すべての断片をchunkSize以下にする。そうでなければ、最後の断片は `chunkSize`以上になる。（ディフォルト：`false`）Force all chunks to be less or equal than chunkSize. Otherwise, the last chunk will be greater than or equal to `chunkSize`. (Default: `false`)
-* `simultaneousUploads` Number of simultaneous uploads (Default: `3`)
-* `fileParameterName` The name of the multipart POST parameter to use for the file chunk  (Default: `file`)
-* `query` Extra parameters to include in the multipart POST with data. This can be an object or a
+* `singleFile` 単一ファイルのアップロードを有効にする。いったん一つのファイルがアップロードされると、２番目のファイルは既存のファイルを追い越して、最初のファイルはキャンセルされます。(ディフォルト: false)Enable single file upload. Once one file is uploaded, second file will overtake existing one, first one will be canceled. (Default: false)
+* `chunkSize` 各断片データのバイトサイズ。最後の断片は少なくてもこのサイズで２倍のサイズまでになりえます。その詳細と理由は、[Issue #51](https://github.com/23/resumable.js/issues/51)を参照してください。(ディフォルト: `1*1024*1024`)The size in bytes of each uploaded chunk of data. The last uploaded chunk will be at least this size and up to two the size, see [Issue #51](https://github.com/23/resumable.js/issues/51) for details and reasons. (Default: `1*1024*1024`)
+* `forceChunkSize` すべての断片をchunkSize以下にします。そうでなければ、最後の断片は `chunkSize`以上になリます。(ディフォルト: `false`)Force all chunks to be less or equal than chunkSize. Otherwise, the last chunk will be greater than or equal to `chunkSize`. (Default: `false`)
+* `simultaneousUploads` 同時アップロード数。(ディフォルト: `3`)Number of simultaneous uploads (Default: `3`)
+* `fileParameterName` ファイル断片に使われるマルチパートPOSTパラメタの名前。(ディフォルト: `file`)　The name of the multipart POST parameter to use for the file chunk  (Default: `file`)
+* `query` データ付きマルチパートPOSTに含める追加パラメタ。これはオブジェクトまたは関数です。関数の場合、引数としてFlowFile, FlowChunk, isTest(boolean)が渡されます。(ディフォルト: `{}`)　Extra parameters to include in the multipart POST with data. This can be an object or a
  function. If a function, it will be passed a FlowFile, a FlowChunk object and a isTest boolean
  (Default: `{}`)
-* `headers` Extra headers to include in the multipart POST with data. If a function, it will be passed a FlowFile, a FlowChunk object and a isTest boolean (Default: `{}`)
-* `withCredentials` Standard CORS requests do not send or set any cookies by default. In order to
+* `headers` データ付きマルチパートPOSTに含める追加ヘッダー。関数の場合、引数としてFlowFile, FlowChunk, isTest(boolean)が渡されます。(ディフォルト: `{}`)Extra headers to include in the multipart POST with data. If a function, it will be passed a FlowFile, a FlowChunk object and a isTest boolean (Default: `{}`)
+* `withCredentials` 標準CORSリクエストは、ディフォルトではいかなるクッキーの送信またはセットを行いません。リクエストの一部としてクッキーを含めたい場合は、`withCredentials`プロパティをtrueにセットしてください。(ディフォルト: `false`)Standard CORS requests do not send or set any cookies by default. In order to
  include cookies as part of the request, you need to set the `withCredentials` property to true.
 (Default: `false`)
-* `method` Method to use when POSTing chunks to the server (`multipart` or `octet`) (Default: `multipart`)
-* `testMethod` HTTP method to use when chunks are being tested. If set to a function, it will be passed a FlowFile and a FlowChunk arguments. (Default: `GET`)
-* `uploadMethod` HTTP method to use when chunks are being uploaded. If set to a function, it will be passed a FlowFile and a FlowChunk arguments. (Default: `POST`)
-* `allowDuplicateUploads ` Once a file is uploaded, allow reupload of the same file. By default, if a file is already uploaded, it will be skipped unless the file is removed from the existing Flow object. (Default: `false`)
+* `method` サーバーに断片をPOSTするときに使うメソッド（`multipart` or `octet`）。 (ディフォルト: `multipart`)Method to use when POSTing chunks to the server (`multipart` or `octet`) (Default: `multipart`)
+* `testMethod` 断片がテストされるときに使われるHTTPメソッド。もし関数がセットされた場合は、引数としてFlowFile, FlowChunkが渡されます。(ディフォルト: `GET`)HTTP method to use when chunks are being tested. If set to a function, it will be passed a FlowFile and a FlowChunk arguments. (Default: `GET`)
+* `uploadMethod` 断片がアップロードされるときに使われるHTTPメソッド。もし関数がセットされた場合は、引数としてFlowFile, FlowChunkが渡されます。(ディフォルト: `POST`)HTTP method to use when chunks are being uploaded. If set to a function, it will be passed a FlowFile and a FlowChunk arguments. (Default: `POST`)
+* `allowDuplicateUploads ` いったんあるファイルがアップロードされると、同じファイルの再アップロードが許可されます。ディフォルトでは、もしあるファイルがすでにアップロードされている場合は、既存のFlowオブジェクトからそのファイルが取り除かれなければそのファイルはスキップされます。(ディフォルト: `false`)Once a file is uploaded, allow reupload of the same file. By default, if a file is already uploaded, it will be skipped unless the file is removed from the existing Flow object. (Default: `false`)
 * `prioritizeFirstAndLastChunk` Prioritize first and last chunks of all files. This can be handy if you can determine if a file is valid for your service from only the first or last chunk. For example, photo or video meta data is usually located in the first part of a file, making it easy to test support from only the first chunk. (Default: `false`)
 * `testChunks` Make a GET request to the server for each chunks to see if it already exists. If implemented on the server-side, this will allow for upload resumes even after a browser crash or even a computer restart. (Default: `true`)
 * `preprocess` Optional function to process each chunk before testing & sending. To the function it will be passed the chunk as parameter, and should call the `preprocessFinished` method on the chunk when finished. (Default: `null`)
