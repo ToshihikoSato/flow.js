@@ -107,7 +107,7 @@ After this is done and `testChunks` enabled, an upload can quickly catch up even
 ## 全体のドキュメント　Full documentation
 
 ### Flow
-#### Configuration
+#### コンフィグレーション　Configuration
 
 オブジェクトはコンフィグレーションオプションをつけてロードされる：
 The object is loaded with a configuration options:
@@ -154,51 +154,51 @@ parameter must be adjusted together with `progressCallbacksInterval` parameter. 
 * `permanentErrors` Response fails if response status is in this list (Default: `[404, 415, 500, 501]`)
 
 
-#### Properties
+#### プロパティ　Properties
 
-* `.support` A boolean value indicator whether or not Flow.js is supported by the current browser.
-* `.supportDirectory` A boolean value, which indicates if browser supports directory uploads.
-* `.opts` A hash object of the configuration of the Flow.js instance.
-* `.files` An array of `FlowFile` file objects added by the user (see full docs for this object type below).
+* `.support` Flow.jsが現在のブラウザによってサポートされるかどうかを示すboolean値。　A boolean value indicator whether or not Flow.js is supported by the current browser.
+* `.supportDirectory` 現在のブラウザがディレクトリアップロードをサポートするかどうかを示すboolean値。A boolean value, which indicates if browser supports directory uploads.
+* `.opts` Flow.jsインスタンスのコンフィグレーションのhashオブジェクト。A hash object of the configuration of the Flow.js instance.
+* `.files` ユーザが追加した`FlowFile`ファイルオブジェクトの配列（以下にあるこのオブジェクトタイプのドキュメントを参照してください）。An array of `FlowFile` file objects added by the user (see full docs for this object type below).
 
-#### Methods
+#### メソッド　Methods
 
-* `.assignBrowse(domNodes, isDirectory, singleFile, attributes)` Assign a browse action to one or more DOM nodes.
-  * `domNodes` array of dom nodes or a single node.
-  * `isDirectory` Pass in `true` to allow directories to be selected (Chrome only, support can be checked with `supportDirectory` property).
-  * `singleFile` To prevent multiple file uploads set this to true. Also look at config parameter `singleFile`.
-  * `attributes` Pass object of keys and values to set custom attributes on input fields.
+* `.assignBrowse(domNodes, isDirectory, singleFile, attributes)` 一つまたは複数のDOMノードにブラウズアクションを割り当てる。　Assign a browse action to one or more DOM nodes.
+  * `domNodes` DOMノードの配列または単一のノード。　array of dom nodes or a single node.
+  * `isDirectory` ディレクトリの選択を許可するなら`true`を渡します。（Chromeのみです。`supportDirectory`プロパティをチェックすることでディレクトリアップロードがサポートされているかどうかわかります。）　Pass in `true` to allow directories to be selected (Chrome only, support can be checked with `supportDirectory` property).
+  * `singleFile` 複数ファイルのアップロードを行わないようにするにはtrueをセットします。コンフィグレーションパラメタの`singleFile`も参照してください。To prevent multiple file uploads set this to true. Also look at config parameter `singleFile`.
+  * `attributes` 入力フィールドにカスタム属性をセットするためのキーと値のオブジェクトを渡します。例えば、`accept`属性を`image/*`にセットすることができます。これによりユーザは画像しか選択することができなくなります。属性の完全な一覧は以下を参照してください：http://www.w3.org/TR/html-markup/input.file.html#input.file-attributes　Pass object of keys and values to set custom attributes on input fields.
    For example, you can set `accept` attribute to `image/*`. This means that user will be able to select only images.
    Full list of attributes: http://www.w3.org/TR/html-markup/input.file.html#input.file-attributes
 
-   Note: avoid using `a` and `button` tags as file upload buttons, use span instead.
-* `.assignDrop(domNodes)` Assign one or more DOM nodes as a drop target.
-* `.unAssignDrop(domNodes)` Unassign one or more DOM nodes as a drop target.
-* `.on(event, callback)` Listen for event from Flow.js (see below)
+   注意：ファイルアップロードボタンには`a`や`button`タグを使わずにspanを使ってください。Note: avoid using `a` and `button` tags as file upload buttons, use span instead.
+* `.assignDrop(domNodes)` 単一または複数のDOMノードをドロップターゲットとして設定します。　Assign one or more DOM nodes as a drop target.
+* `.unAssignDrop(domNodes)` 単一または複数のDOMノードをドロップターゲットから解除します。　Unassign one or more DOM nodes as a drop target.
+* `.on(event, callback)` Flow.jsからイベントをリスンします。（以下を参照）　Listen for event from Flow.js (see below)
 * `.off([event, [callback]])`:
-    * `.off()` All events are removed.
-    * `.off(event)` Remove all callbacks of specific event.
-    * `.off(event, callback)` Remove specific callback of event. `callback` should be a `Function`.
-* `.upload()` Start or resume uploading.
-* `.pause()` Pause uploading.
-* `.resume()` Resume uploading.
-* `.cancel()` Cancel upload of all `FlowFile` objects and remove them from the list.
-* `.progress()` Returns a float between 0 and 1 indicating the current upload progress of all files.
-* `.isUploading()` Returns a boolean indicating whether or not the instance is currently uploading anything.
-* `.addFile(file)` Add a HTML5 File object to the list of files.
-* `.removeFile(file)` Cancel upload of a specific `FlowFile` object on the list from the list.
-* `.getFromUniqueIdentifier(uniqueIdentifier)` Look up a `FlowFile` object by its unique identifier.
-* `.getSize()` Returns the total size of the upload in bytes.
-* `.sizeUploaded()` Returns the total size uploaded of all files in bytes.
-* `.timeRemaining()` Returns remaining time to upload all files in seconds. Accuracy is based on average speed. If speed is zero, time remaining will be equal to positive infinity `Number.POSITIVE_INFINITY`
+    * `.off()` すべてのイベントを除去します。　All events are removed.
+    * `.off(event)` 指定したイベントのすべてのコールバックを除去します。　Remove all callbacks of specific event.
+    * `.off(event, callback)` 指定したイベントのコールバックを除去します。`callback`には`Function`を渡してください。　Remove specific callback of event. `callback` should be a `Function`.
+* `.upload()` アップロードを開始または再開します。　Start or resume uploading.
+* `.pause()` アップロードを一時停止します。　Pause uploading.
+* `.resume()` アップロードを再開します。　Resume uploading.
+* `.cancel()` すべてのFlowFile`オブジェクトのアップロードをキャンセルしてリストから除去します。　Cancel upload of all `FlowFile` objects and remove them from the list.
+* `.progress()` すべてのファイルのアップロードの進捗を表す0から1の間のfloat値を返します。　Returns a float between 0 and 1 indicating the current upload progress of all files.
+* `.isUploading()` インスタンスが現在何らかのアップロードを実行中かどうかを示すboolean値を返します。　Returns a boolean indicating whether or not the instance is currently uploading anything.
+* `.addFile(file)` HTML5 Fileオブジェクトをファイルリストに追加します。　Add a HTML5 File object to the list of files.
+* `.removeFile(file)` 指定した`FlowFile`オブジェクトのアップロードをキャンセルしてリストから除去します。　Cancel upload of a specific `FlowFile` object on the list from the list.
+* `.getFromUniqueIdentifier(uniqueIdentifier)` ユニークIDにより`FlowFile`オブジェクトを検索します。　Look up a `FlowFile` object by its unique identifier.
+* `.getSize()` アップロードの全体容量をバイト数で返します。　Returns the total size of the upload in bytes.
+* `.sizeUploaded()` 現在までにアップロードされた容量をバイト数で返します。　Returns the total size uploaded of all files in bytes.
+* `.timeRemaining()` すべてのファイルをアップロードするために要する残り時間を秒で返します。平均スピードから計算します。もしスピードがゼロならば、残り時間は正の無限大`Number.POSITIVE_INFINITY`となります。　Returns remaining time to upload all files in seconds. Accuracy is based on average speed. If speed is zero, time remaining will be equal to positive infinity `Number.POSITIVE_INFINITY`
 
-#### Events
+#### イベント　Events
 
-* `.fileSuccess(file, message, chunk)` A specific file was completed. First argument `file` is instance of `FlowFile`, second argument `message` contains server response. Response is always a string. 
+* `.fileSuccess(file, message, chunk)` 指定ファイルが完了した。第一引数`file`は`FlowFile`のインスタンス、第二引数`message`はサーバーレスポンスを含みます。レスポンスは常に文字列となります。第三引数`chunk`は、`FlowChunk`のインスタンスです。レスポンスステータスはxhrオブジェクト`chunk.xhr.status`にアクセスすると得ることができます。　A specific file was completed. First argument `file` is instance of `FlowFile`, second argument `message` contains server response. Response is always a string. 
 Third argument `chunk` is instance of `FlowChunk`. You can get response status by accessing xhr 
 object `chunk.xhr.status`.
-* `.fileProgress(file, chunk)` Uploading progressed for a specific file.
-* `.fileAdded(file, event)` This event is used for file validation. To reject this file return false.
+* `.fileProgress(file, chunk)` 師弟ファイルのアップロードが進行中である。　Uploading progressed for a specific file.
+* `.fileAdded(file, event)` ファイルバリデーションのために使われる。このファイルをリジェクトするにはfalseを返す。このイベントはアップロードキューにファイルを追加する前にも呼ばれます。つまり、`flow.upload()`関数の呼び出しは現在のファイルアップロードを開始しないことを意味します。オプションとして、ファイルが追加された時のブラウザの`event`オブジェクトを使うことができます。　This event is used for file validation. To reject this file return false.
 This event is also called before file is added to upload queue,
 this means that calling `flow.upload()` function will not start current file upload.
 Optionally, you can use the browser `event` object from when the file was
