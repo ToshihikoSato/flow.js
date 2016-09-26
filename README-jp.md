@@ -135,23 +135,24 @@ function, it will be passed a FlowFile, a FlowChunk and isTest boolean (Default:
 * `testMethod` 断片がテストされるときに使われるHTTPメソッド。もし関数がセットされた場合は、引数としてFlowFile, FlowChunkが渡されます。(ディフォルト: `GET`)HTTP method to use when chunks are being tested. If set to a function, it will be passed a FlowFile and a FlowChunk arguments. (Default: `GET`)
 * `uploadMethod` 断片がアップロードされるときに使われるHTTPメソッド。もし関数がセットされた場合は、引数としてFlowFile, FlowChunkが渡されます。(ディフォルト: `POST`)HTTP method to use when chunks are being uploaded. If set to a function, it will be passed a FlowFile and a FlowChunk arguments. (Default: `POST`)
 * `allowDuplicateUploads ` いったんあるファイルがアップロードされると、同じファイルの再アップロードが許可されます。ディフォルトでは、もしあるファイルがすでにアップロードされている場合は、既存のFlowオブジェクトからそのファイルが取り除かれなければそのファイルはスキップされます。(ディフォルト: `false`)Once a file is uploaded, allow reupload of the same file. By default, if a file is already uploaded, it will be skipped unless the file is removed from the existing Flow object. (Default: `false`)
-* `prioritizeFirstAndLastChunk` Prioritize first and last chunks of all files. This can be handy if you can determine if a file is valid for your service from only the first or last chunk. For example, photo or video meta data is usually located in the first part of a file, making it easy to test support from only the first chunk. (Default: `false`)
-* `testChunks` Make a GET request to the server for each chunks to see if it already exists. If implemented on the server-side, this will allow for upload resumes even after a browser crash or even a computer restart. (Default: `true`)
-* `preprocess` Optional function to process each chunk before testing & sending. To the function it will be passed the chunk as parameter, and should call the `preprocessFinished` method on the chunk when finished. (Default: `null`)
-* `initFileFn` Optional function to initialize the fileObject. To the function it will be passed a FlowFile and a FlowChunk arguments.
-* `readFileFn` Optional function wrapping reading operation from the original file. To the function it will be passed the FlowFile, the startByte and endByte, the fileType and the FlowChunk.
-* `generateUniqueIdentifier` Override the function that generates unique identifiers for each file. (Default: `null`)
-* `maxChunkRetries` The maximum number of retries for a chunk before the upload is failed. Valid values are any positive integer and `undefined` for no limit. (Default: `0`)
-* `chunkRetryInterval` The number of milliseconds to wait before retrying a chunk on a non-permanent error.  Valid values are any positive integer and `undefined` for immediate retry. (Default: `undefined`)
-* `progressCallbacksInterval` The time interval in milliseconds between progress reports. Set it
+* `prioritizeFirstAndLastChunk` 最初と最後のファイル断片の優先度を上げます。もし最初か最後の断片を見るだけでファイルのバリデーションが行えるならこれは便利な方法です。例えば、写真やビデオのメタデータは通常ファイルの最初にあるので、最初の断片だけを見れば簡単にテストできるのです。(ディフォルト: `false`)　Prioritize first and last chunks of all files. This can be handy if you can determine if a file is valid for your service from only the first or last chunk. For example, photo or video meta data is usually located in the first part of a file, making it easy to test support from only the first chunk. (Default: `false`)
+* `testChunks` 各断片がすでに存在するかどうかを調べるGETリクエストを発行します。これがサーバーサイドで実装されていると、ブラウザがクラッシュしたりコンピューターを再起動した後であってもアップロードを再開することができます。(ディフォルト: `true`)　Make a GET request to the server for each chunks to see if it already exists. If implemented on the server-side, this will allow for upload resumes even after a browser crash or even a computer restart. (Default: `true`)
+* `preprocess` 各断片をテストして送信する前に処理するオプション関数。その関数にはパラメタとして断片が渡され、終了したら断片に対して`preprocessFinished`メソッドを呼び出すようにしてください。 (ディフォルト: `null`)　Optional function to process each chunk before testing & sending. To the function it will be passed the chunk as parameter, and should call the `preprocessFinished` method on the chunk when finished. (Default: `null`)
+* `initFileFn` fileObjectを初期化するオプション関数。その関数にはFlowFileとFlowChunkが引数として渡されます。　Optional function to initialize the fileObject. To the function it will be passed a FlowFile and a FlowChunk arguments.
+* `readFileFn` オリジナルファイルから読み出し操作を行うオプション関数。その関数にはFlowFile、startByte、endByte、fileType、FlowChunkが引数として渡されます。　Optional function wrapping reading operation from the original file. To the function it will be passed the FlowFile, the startByte and endByte, the fileType and the FlowChunk.
+* `generateUniqueIdentifier` 各ファイルに対するユニークIDを生成する関数をオーバーライドします。(ディフォルト: `null`)　Override the function that generates unique identifiers for each file. (Default: `null`)
+* `maxChunkRetries` アップロードが失敗とみなす前にリトライされる最大回数。正の整数または無制限の場合は`undefined`を値として指定してください。 (ディフォルト: `0`)　The maximum number of retries for a chunk before the upload is failed. Valid values are any positive integer and `undefined` for no limit. (Default: `0`)
+* `chunkRetryInterval` 断片の再送の前に待つ秒数。正の整数またはすぐに再送する場合は`undefined`を値として指定してください。(ディフォルト: `undefined`)The number of milliseconds to wait before retrying a chunk on a non-permanent error.  Valid values are any positive integer and `undefined` for immediate retry. (Default: `undefined`)
+* `progressCallbacksInterval` 進捗レポートを行う時間感覚（ミリ秒）。各々の進捗コールバックを扱いたいならば0を設定してください。 (ディフォルト: `500`)　The time interval in milliseconds between progress reports. Set it
 to 0 to handle each progress callback. (Default: `500`)
-* `speedSmoothingFactor` Used for calculating average upload speed. Number from 1 to 0. Set to 1
+* `speedSmoothingFactor` 平均アップロード速度の計算に使われます。1から0の数値です。1に設定すると平均アップロード速度は現在のアップロード速度と同じになります。長いファイルのアップロードには、0.02を設定します。残り時間の推測がより正確になるからです。このパラメタは`progressCallbacksInterval`と一緒に調整されます。(ディフォルト 0.1)　Used for calculating average upload speed. Number from 1 to 0. Set to 1
 and average upload speed wil be equal to current upload speed. For longer file uploads it is
 better set this number to 0.02, because time remaining estimation will be more accurate. This
 parameter must be adjusted together with `progressCallbacksInterval` parameter. (Default 0.1)
-* `successStatuses` Response is success if response status is in this list (Default: `[200,201,
+* `successStatuses` 成功レスポンスとみなすステータスのリスト。(Default: `[200,201,
+202]`)　Response is success if response status is in this list (ディフォルト: `[200,201,
 202]`)
-* `permanentErrors` Response fails if response status is in this list (Default: `[404, 415, 500, 501]`)
+* `permanentErrors` 失敗レスポンスとみなすステータスのリスト。(ディフォルト: `[404, 415, 500, 501]`)　Response fails if response status is in this list (Default: `[404, 415, 500, 501]`)
 
 
 #### プロパティ　Properties
