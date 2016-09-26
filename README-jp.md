@@ -219,32 +219,32 @@ retried.
 FlowFileコンストラクタには、`Flow.FlowFile`という形でアクセスします。　FlowFile constructor can be accessed in `Flow.FlowFile`.
 #### プロパティ　Properties
 
-* `.flowObj` A back-reference to the parent `Flow` object.
-* `.file` The correlating HTML5 `File` object.
-* `.name` The name of the file.
-* `.relativePath` The relative path to the file (defaults to file name if relative path doesn't exist)
-* `.size` Size in bytes of the file.
-* `.uniqueIdentifier` A unique identifier assigned to this file object. This value is included in uploads to the server for reference, but can also be used in CSS classes etc when building your upload UI.
-* `.averageSpeed` Average upload speed, bytes per second.
-* `.currentSpeed` Current upload speed, bytes per second.
-* `.chunks` An array of `FlowChunk` items. You shouldn't need to dig into these.
-* `.paused` Indicated if file is paused.
-* `.error` Indicated if file has encountered an error.
+* `.flowObj` 親である`Flow`オブジェクトへの逆参照。　A back-reference to the parent `Flow` object.
+* `.file` 対応するHTML５ `File`オブジェクト。　The correlating HTML5 `File` object.
+* `.name` ファイル名。　The name of the file.
+* `.relativePath` ファイルへの相対パス。（相対パスが存在しない場合のディフォルトはファイル名となる）　The relative path to the file (defaults to file name if relative path doesn't exist)
+* `.size` ファイルのバイト数。　Size in bytes of the file.
+* `.uniqueIdentifier` ファイルオブジェクトに割り当てられたユニークなID。この値はサーバへのアップロードの中にも参照のために含まれる。一方、アップロードUIを構成する際にもCSSクラスなどで使われる。　A unique identifier assigned to this file object. This value is included in uploads to the server for reference, but can also be used in CSS classes etc when building your upload UI.
+* `.averageSpeed` 平均アップロード速度（バイト/秒)。　Average upload speed, bytes per second.
+* `.currentSpeed` 現在のアップロード速度（バイト/秒)。　Current upload speed, bytes per second.
+* `.chunks` `FlowChunk`アイテムの配列。これらの中に立ち入る必要はない。　An array of `FlowChunk` items. You shouldn't need to dig into these.
+* `.paused` ファイルが一時停止中かどうかを表す。　Indicated if file is paused.
+* `.error` ファイルがエラーになったかどうかを表す。　Indicated if file has encountered an error.
 
 #### メソッド　Methods
 
-* `.progress(relative)` Returns a float between 0 and 1 indicating the current upload progress of the file. If `relative` is `true`, the value is returned relative to all files in the Flow.js instance.
-* `.pause()` Pause uploading the file.
-* `.resume()` Resume uploading the file.
-* `.cancel()` Abort uploading the file and delete it from the list of files to upload.
-* `.retry()` Retry uploading the file.
-* `.bootstrap()` Rebuild the state of a `FlowFile` object, including reassigning chunks and XMLHttpRequest instances.
-* `.isUploading()` Returns a boolean indicating whether file chunks is uploading.
-* `.isComplete()` Returns a boolean indicating whether the file has completed uploading and received a server response.
-* `.sizeUploaded()` Returns size uploaded in bytes.
-* `.timeRemaining()` Returns remaining time to finish upload file in seconds. Accuracy is based on average speed. If speed is zero, time remaining will be equal to positive infinity `Number.POSITIVE_INFINITY`
-* `.getExtension()` Returns file extension in lowercase.
-* `.getType()` Returns file type.
+* `.progress(relative)` ファイルの現在のアップロードの進捗を表す0から1の間のfloat値を返します。`relative`が`true`なら、Flow.jsインスタンス内のすべてのファイルに相対する値が返されます。　Returns a float between 0 and 1 indicating the current upload progress of the file. If `relative` is `true`, the value is returned relative to all files in the Flow.js instance.
+* `.pause()` ファイルのアップロードを一時停止します。　Pause uploading the file.
+* `.resume()` ファイルのアップロードを再開します。　Resume uploading the file.
+* `.cancel()` ファイルのアップロードを注視して、アップロードすべきファイルのリストから削除します。　Abort uploading the file and delete it from the list of files to upload.
+* `.retry()` ファイルのアップロードをリトライします。　Retry uploading the file.
+* `.bootstrap()` `FlowFile`オブジェクトの状態を再構築します。断片及びXMLHttpRequestの再割り当ても行います。　Rebuild the state of a `FlowFile` object, including reassigning chunks and XMLHttpRequest instances.
+* `.isUploading()` ファイル断片がアップロード中かどうかを示すboolean値を返します。　Returns a boolean indicating whether file chunks is uploading.
+* `.isComplete()` ファイルのアップロードが完了してサーバーからのレスポンスも受け取ったかどうかを示すboolean値を返します。　Returns a boolean indicating whether the file has completed uploading and received a server response.
+* `.sizeUploaded()` アップロード済みのバイト数を返します。　Returns size uploaded in bytes.
+* `.timeRemaining()` あと何秒でアップロードが完了するかの残り時間を返します。平均スピードから計算します。もしスピードがゼロならば、残り時間は正の無限大`Number.POSITIVE_INFINITY`となります。　Returns remaining time to finish upload file in seconds. Accuracy is based on average speed. If speed is zero, time remaining will be equal to positive infinity `Number.POSITIVE_INFINITY`
+* `.getExtension()` ファイルの拡張子を小文字で返します。　Returns file extension in lowercase.
+* `.getType()` ファイルタイプを返します。　Returns file type.
 
 ## 貢献　Contribution
 
