@@ -197,27 +197,27 @@ parameter must be adjusted together with `progressCallbacksInterval` parameter. 
 * `.fileSuccess(file, message, chunk)` 指定ファイルが完了した。第一引数`file`は`FlowFile`のインスタンス、第二引数`message`はサーバーレスポンスを含みます。レスポンスは常に文字列となります。第三引数`chunk`は、`FlowChunk`のインスタンスです。レスポンスステータスはxhrオブジェクト`chunk.xhr.status`にアクセスすると得ることができます。　A specific file was completed. First argument `file` is instance of `FlowFile`, second argument `message` contains server response. Response is always a string. 
 Third argument `chunk` is instance of `FlowChunk`. You can get response status by accessing xhr 
 object `chunk.xhr.status`.
-* `.fileProgress(file, chunk)` 師弟ファイルのアップロードが進行中である。　Uploading progressed for a specific file.
+* `.fileProgress(file, chunk)` 指定ファイルのアップロードが進行中である。　Uploading progressed for a specific file.
 * `.fileAdded(file, event)` ファイルバリデーションのために使われる。このファイルをリジェクトするにはfalseを返す。このイベントはアップロードキューにファイルを追加する前にも呼ばれます。つまり、`flow.upload()`関数の呼び出しは現在のファイルアップロードを開始しないことを意味します。オプションとして、ファイルが追加された時のブラウザの`event`オブジェクトを使うことができます。　This event is used for file validation. To reject this file return false.
 This event is also called before file is added to upload queue,
 this means that calling `flow.upload()` function will not start current file upload.
 Optionally, you can use the browser `event` object from when the file was
 added.
-* `.filesAdded(array, event)` Same as fileAdded, but used for multiple file validation.
-* `.filesSubmitted(array, event)` Same as filesAdded, but happens after the file is added to upload queue. Can be used to start upload of currently added files.
-* `.fileRemoved(file)` The specific file was removed from the upload queue. Combined with filesSubmitted, can be used to notify UI to update its state to match the upload queue.
-* `.fileRetry(file, chunk)` Something went wrong during upload of a specific file, uploading is being 
+* `.filesAdded(array, event)` fileAddedと同様ですが、複数ファイルのバリデーションに利用されます。Same as fileAdded, but used for multiple file validation.
+* `.filesSubmitted(array, event)` filesAddedと同様ですが、ファイルがアップロードキューに追加された後に呼ばれます。現在追加されているファイルのアップロードをスタートするときに呼ばれます。　Same as filesAdded, but happens after the file is added to upload queue. Can be used to start upload of currently added files.
+* `.fileRemoved(file)` 指定ファイルがアップロードキューから除去されたときに呼ばれる。filesSubmittedと合わせてUI上でアップロードキューの状態を更新表示するときに使えます。　The specific file was removed from the upload queue. Combined with filesSubmitted, can be used to notify UI to update its state to match the upload queue.
+* `.fileRetry(file, chunk)` 指定ファイルのアップロード中に何かおかしくなってアップロードがリトライされた場合に呼ばれる。　Something went wrong during upload of a specific file, uploading is being 
 retried.
-* `.fileError(file, message, chunk)` An error occurred during upload of a specific file.
-* `.uploadStart()` Upload has been started on the Flow object.
-* `.complete()` Uploading completed.
-* `.progress()` Uploading progress.
-* `.error(message, file, chunk)` An error, including fileError, occurred.
-* `.catchAll(event, ...)` Listen to all the events listed above with the same callback function.
+* `.fileError(file, message, chunk)` 指定ファイルのアップロード中にエラーが発生した場合に呼ばれる。　An error occurred during upload of a specific file.
+* `.uploadStart()` Flowオブジェクトに対するアップロードが開始されたときに呼ばれる。　Upload has been started on the Flow object.
+* `.complete()` アップロードが完了したときに呼ばれる。　Uploading completed.
+* `.progress()` アップロードの進行中に呼ばれる。　Uploading progress.
+* `.error(message, file, chunk)` fileErrorを含むエラーが発生した場合に呼ばれる。　An error, including fileError, occurred.
+* `.catchAll(event, ...)` 上記のすべてのイベントを同じコールバック関数で受ける場合に使います。　Listen to all the events listed above with the same callback function.
 
 ### FlowFile
-FlowFile constructor can be accessed in `Flow.FlowFile`.
-#### Properties
+FlowFileコンストラクタには、`Flow.FlowFile`という形でアクセスします。　FlowFile constructor can be accessed in `Flow.FlowFile`.
+#### プロパティ　Properties
 
 * `.flowObj` A back-reference to the parent `Flow` object.
 * `.file` The correlating HTML5 `File` object.
@@ -231,7 +231,7 @@ FlowFile constructor can be accessed in `Flow.FlowFile`.
 * `.paused` Indicated if file is paused.
 * `.error` Indicated if file has encountered an error.
 
-#### Methods
+#### メソッド　Methods
 
 * `.progress(relative)` Returns a float between 0 and 1 indicating the current upload progress of the file. If `relative` is `true`, the value is returned relative to all files in the Flow.js instance.
 * `.pause()` Pause uploading the file.
@@ -246,7 +246,7 @@ FlowFile constructor can be accessed in `Flow.FlowFile`.
 * `.getExtension()` Returns file extension in lowercase.
 * `.getType()` Returns file type.
 
-## Contribution
+## 貢献　Contribution
 
 To ensure consistency throughout the source code, keep these rules in mind as you are working:
 
@@ -255,7 +255,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 * We follow the rules contained in [Google's JavaScript Style Guide](http://google-styleguide.googlecode.com/svn/trunk/javascriptguide.xml) with an exception we wrap all code at 100 characters.
 
 
-## Installation Dependencies
+## インストール依存　Installation Dependencies
 1. To clone your Github repository, run:
 ```console
 git clone git@github.com:<github username>/flow.js.git
@@ -268,7 +268,7 @@ cd flow.js
 ```console
 npm install
 ```
-## Testing
+## テスト　Testing
 
 Our unit and integration tests are written with Jasmine and executed with Karma. To run all of the
 tests on Chrome run:
